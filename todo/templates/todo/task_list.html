@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+
+  <!-- Search Bar -->
+  <form method="get" class="mb-4">
+    <div class="input-group">
+      <input type="text" name="q" placeholder="Search tasks..." class="form-control" value="{{ query|default_if_none:'' }}">
+      <button type="submit" class="btn btn-outline-primary">
+        <i class="bi bi-search"></i> Search
+      </button>
+    </div>
+  </form>
+
+  <!-- Pending Tasks -->
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <h4><i class="bi bi-list-task me-1"></i>Pending Tasks</h4>
+    <a href="{% url 'task-add' %}" class="btn" style="background-color: #00cfff; color: white;">
+      <i class="bi bi-plus-circle me-1"></i> Add Task
+    </a>
+  </div>
+
+  <ul class="list-group mb-4 shadow-sm">
+    {% for task in pending_tasks %}
+      <li class="list-group-item d-flex justify-content-between align-items-center">
+        <span>{{ task.title }}</span>
+        <span>
+          <!-- Details Button -->
+          <button class="btn btn-sm btn-info me-2" data-bs-toggle="modal" data-bs-target="#detailsModal{{ task.pk }}">
+            <i class="bi bi-info-circle"></i> Details
+          </button>
+
+          <a href="{% url 'task-edit' task.pk %}" class="btn btn-sm btn-warning me-2">
+            <i class="bi bi-pencil"></i> Edit
+          </a>
+          <a href="{% url 'task-delete' task.pk %}" class="btn btn-sm btn-danger">
+            <i class="bi bi-trash"></i> Delete
+          </a>
+        </span>
+      </li>
+
+      <!-- Modal -->
+      <div class="modal fade" id="detailsModal{{ task.pk }}" tabindex="-1" aria-labelledby="detailsModalLabel{{ task.pk }}" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+          <div class="modal-content">
+            <div class="modal-header bg-info text-white">
+              <h5 class="modal-title" id="detailsModalLabel{{ task.pk }}">
+                <i class="bi bi-card-text me-2"></i>{{ task.title }}
+              </h5>
+              <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+              <p><strong>Description:</strong></p>
+              <p>{{ task.description|default:"No description provided." }}</p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <li class="list-group-item text-muted">No pending tasks</li>
+    {% endfor %}
+  </ul>
+
+  <!-- Completed Tasks -->
+  <h4><i class="bi bi-check2-circle me-1 text-success"></i>Completed Tasks</h4>
+  <ul class="list-group shadow-sm">
+    {% for task in completed_tasks %}
+      <li class="list-group-item text-muted">
+        <i class="bi bi-check2-square text-success me-2"></i>{{ task.title }}
+      </li>
+    {% empty %}
+      <li class="list-group-item text-muted">No completed tasks</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}
