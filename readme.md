@@ -28,7 +28,7 @@ This is a task management application built using Django and Django REST Framewo
 " 1. Clone the Repository"
 
 ```bash
-git clone https://github.com/your-username/django-todo-app.git
+git clone https://github.com/Pahuljot07/Django-To-Do.git
 cd django-todo-app
 
 "# 2. Create Virtual Environment"
